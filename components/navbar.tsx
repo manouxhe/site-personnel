@@ -25,6 +25,7 @@ export default function Navbar() {
       <NavItem href="/" label="Home" />
       <NavItem href="/about" label="About" />
       <NavItem href="/projects" label="Projects" />
+      <NavItem href="/skills" label="Projects" />
       <NavItem href="/contact" label="Contact" />
       <NavItem href="/chat" label="Chat" />
     </nav>
