@@ -1,16 +1,7 @@
 import Navbar from "@/components/navbar";
 
-import { Playfair_Display } from "next/font/google";
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-});
-import { Inter } from "next/font/google";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
+
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -33,23 +24,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`
-          ${geistSans.variable}
-          ${geistMono.variable}
-          ${playfair.className}
-          ${inter.className}
-          antialiased
-          bg-[oklch(94.8%_0.028_342.258)]
-
-
-        `}
-      >
+      <body className="antialiased bg-[oklch(94.8%_0.028_342.258)]">
         <Navbar />
         {children}
       </body>

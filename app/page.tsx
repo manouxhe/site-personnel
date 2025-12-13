@@ -1,7 +1,16 @@
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+
+
+
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center text-center min-h-screen">
-      <h1 className="text-6xl  text-[oklch(81%_0.117_11.638)] mb-4">
+    <main className={`flex flex-col items-center justify-center text-center min-h-screen `}>
+      <h1 className={`text-6xl text-[oklch(81%_0.117_11.638)] mb-4 ${playfair.className}`}>
         Hello, my name is Manar Elkadi
       </h1>
 
