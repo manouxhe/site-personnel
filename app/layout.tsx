@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="antialiased bg-[oklch(94.8%_0.028_342.258)]">
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -28,6 +28,7 @@ export default function Navbar() {
       <NavItem href="/skills" label="Skills" />
       <NavItem href="/contact" label="Contact" />
       <NavItem href="/chat" label="Chat" />
+      <NavItem href="/blog" label="Blog" />
     </nav>
   );
 }
