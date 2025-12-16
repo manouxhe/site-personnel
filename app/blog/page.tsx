@@ -1,4 +1,4 @@
-import { createPost, getPosts } from '@/lib/task'
+import { createPost, getPosts, editPost, deletePost } from '@/lib/task'
 import PostCard from '@/components/post-card'
 
 export default async function BlogPage() {
@@ -6,9 +6,9 @@ export default async function BlogPage() {
 
   return (
     <main className="min-h-screen bg-pink-50 p-8">
-      <h1 className="text-3xl font-bold mb-6">Mini Blog</h1>
+      <h1 className="text-3xl font-bold mb-6">My daily Blog</h1>
 
-      {/* FORMULAIRE */}
+      {/* CREATE */}
       <form action={createPost} className="mb-8">
         <textarea
           name="content"
@@ -21,14 +21,15 @@ export default async function BlogPage() {
         </button>
       </form>
 
-      {/* AFFICHAGE DES POSTS */}
+      {/* READ + EDIT + DELETE */}
       {posts.map((post, index) => (
-        <PostCard
-          key={index}
-          content={post.content}
-          createdAt={post.createdAt}
-        />
-      ))}
+          <PostCard
+            key={index}
+            content={post.content}
+            createdAt={post.createdAt}
+            index={index}
+          />
+        ))}
     </main>
   )
 }
