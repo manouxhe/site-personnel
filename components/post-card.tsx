@@ -1,27 +1,25 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { editPost, deletePost } from '@/lib/task'
+import { useState } from "react";
+import { editPost, deletePost } from "@/lib/task"; // On importe les fonctions pour l'édition et la suppression des posts.
 
 type PostCardProps = {
-  content: string
-  createdAt: Date
-  index: number
-}
+  id: string;
+  content: string;
+  createdAt: Date;
+};
 
-export default function PostCard({ content, createdAt, index }: PostCardProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [newContent, setNewContent] = useState(content)
+export default function PostCard({ id, content, createdAt }: PostCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newContent, setNewContent] = useState(content);
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-      
-      {/* 🟢 MODE AFFICHAGE */}
-      {!isEditing && (
+      {!isEditing ? (
         <>
           <p className="text-gray-800 mb-2">{content}</p>
           <p className="text-xs text-gray-400 mb-4">
-            {createdAt.toLocaleString()}
+            {new Date(createdAt).toLocaleString()}
           </p>
 
           <div className="flex gap-4">
@@ -32,18 +30,17 @@ export default function PostCard({ content, createdAt, index }: PostCardProps) {
               Edit
             </button>
 
-            <form action={() => deletePost(index)}>
-              <button className="text-red-500">Delete</button>
+            <form action={deletePost} method="POST">
+              <input type="hidden" name="id" value={id} />
+              <button type="submit" className="text-red-500">
+                ✕
+              </button>
             </form>
           </div>
         </>
-      )}
-
-      {/* ✏️ MODE ÉDITION */}
-      {isEditing && (
-        <form action={editPost} className="flex flex-col gap-3">
-          <input type="hidden" name="index" value={index} />
-
+      ) : (
+        <form action={editPost} method="POST" className="flex flex-col gap-3">
+          <input type="hidden" name="id" value={id} />
           <textarea
             name="content"
             value={newContent}
@@ -53,10 +50,12 @@ export default function PostCard({ content, createdAt, index }: PostCardProps) {
           />
 
           <div className="flex gap-3">
-            <button className="bg-blue-500 text-white px-4 py-1 rounded">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-1 rounded"
+            >
               Save
             </button>
-
             <button
               type="button"
               onClick={() => setIsEditing(false)}
@@ -68,5 +67,5 @@ export default function PostCard({ content, createdAt, index }: PostCardProps) {
         </form>
       )}
     </div>
-  )
+  );
 }

@@ -1,58 +1,46 @@
-"use server"; //ndique à Next.js que tout le code de ce fichier s’exécute uniquement côté serveur.
+'use server';
 
-import { redirect } from "next/navigation"; //Permet de forcer une navigation (rechargement ou changement de page) après une action serveur.
+import { db } from '@/db'; // Assurez-vous d'avoir importé votre connexion à la base de données correctement.
+import { postsTable } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm'; // Assurez-vous d'avoir importé ces fonctions de Drizzle correctement.
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
-/* Définir la structure exacte d’un post de blog  Les types n’existent pas à l’exécution.
-Ils servent uniquement à éviter les erreursV*/
-export type Post = {
-  content: string;
-  createdAt: Date;
-};
-
-/*export : rend la fonction accessible depuis d’autres fichiers
-/* Stocker les posts côté serveur, dans un tableau. Le navigateur n’y a PAS accès directement*/
-const posts: Post[] = [];
-
-/* Permettre à une page de récupérer la liste des posts. */
-export async function getPosts(): Promise<Post[]> {
-  /*Une fonction async retourne toujours une promesse*/
-  return posts;
+/* ================= READ ================= */
+export async function getPosts() {
+  return await db
+    .select()
+    .from(postsTable)
+    .orderBy(desc(postsTable.createdAt));  // On récupère les posts triés par date de création (du plus récent au plus ancien).
 }
 
-/*Cette fonction dit :
-
-“Quelqu’un peut me demander la liste des messages,
-et je la renverrai.”*/
-
-/* 4Créer un post */
+/* ================= CREATE ================= */
 export async function createPost(form: FormData) {
-  /*Créer un nouveau post à partir des données envoyées par un formulaire HTML*/
+  const content = String(form.get('content')); // On transforme le contenu récupéré du formulaire en chaîne de caractères.
 
-  /*Là, quelqu’un a rempli un formulaire et a cliqué sur un bouton.
-Le navigateur envoie  “Voilà ce que l’utilisateur a tapé”*/
-  const content = String(
-    form.get("content")
-  ); /*On le transforme en texte (String) pour être sûrs */
+  await db.insert(postsTable).values({ content }); // On insère le post dans la base de données.
 
-  posts.unshift({
-    /*unshift ajoute l’élément au début du tableau*/ content,
-    createdAt: new Date(),
-  });
-
-  
-  redirect("/blog"); //Recharger la page /blog pour afficher immédiatement le nouveau post
+  redirect((await headers()).get('referer') ?? '/blog');  // On redirige vers la page des posts.
 }
+
+/* ================= UPDATE ================= */
 export async function editPost(form: FormData) {
-  const index = Number(form.get('index'))
-  const newContent = String(form.get('content'))
+  const id = String(form.get('id'));  // On récupère l'ID du post à modifier.
+  const content = String(form.get('content'));  // On récupère le nouveau contenu du post.
 
-  posts[index].content = newContent
+  await db
+    .update(postsTable)
+    .set({ content })  // On met à jour le contenu du post.
+    .where(eq(postsTable.id, id));  // On trouve le post à modifier via son ID.
 
-  redirect('/blog')
+  redirect((await headers()).get('referer') ?? '/blog');  // On redirige vers la page des posts après modification.
 }
 
-/* 🗑 DELETE */
-export async function deletePost(index: number) {
-  posts.splice(index, 1)
-  redirect('/blog')
+/* ================= DELETE ================= */
+export async function deletePost(form: FormData) {
+  const id = String(form.get('id'));  // On récupère l'ID du post à supprimer.
+
+  await db.delete(postsTable).where(eq(postsTable.id, id));  // On supprime le post de la base de données.
+
+  redirect((await headers()).get('referer') ?? '/blog');  // On redirige vers la page des posts après suppression.
 }

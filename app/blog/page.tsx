@@ -1,14 +1,14 @@
-import { createPost, getPosts, editPost, deletePost } from "@/lib/task";
-import PostCard from "@/components/post-card";
+import { createPost, getPosts } from "@/lib/task";  // On importe les fonctions pour récupérer et créer des posts.
+import PostCard from "@/components/post-card";  // On importe le composant pour afficher les posts.
 
 export default async function BlogPage() {
-  const posts = await getPosts();
+  const posts = await getPosts();  // On récupère les posts depuis la base de données.
 
   return (
     <main className="min-h-screen bg-pink-50 p-8">
       <h1 className="text-3xl font-bold mb-6">My daily Blog</h1>
 
-      {/* CREATE */}
+      {/* FORMULAIRE DE CRÉATION */}
       <form action={createPost} className="mb-8">
         <textarea
           name="content"
@@ -21,13 +21,13 @@ export default async function BlogPage() {
         </button>
       </form>
 
-      {/* READ + EDIT + DELETE */}
+      {/* AFFICHAGE DES POSTS */}
       {posts.map((post, index) => (
         <PostCard
           key={index}
+          id={post.id}
           content={post.content}
           createdAt={post.createdAt}
-          index={index}
         />
       ))}
     </main>

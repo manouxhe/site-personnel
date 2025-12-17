@@ -1,7 +1,7 @@
-import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp } from "drizzle-orm/pg-core";
 
-export const tasksTable = pgTable("tasks", {
+export const postsTable = pgTable("posts", {
   id: uuid().defaultRandom().primaryKey(),
-  title: text().notNull(),
-  done: boolean().default(false).notNull(),
+  content: text().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
 });
