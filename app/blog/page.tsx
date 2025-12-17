@@ -1,8 +1,8 @@
-import { createPost, getPosts, editPost, deletePost } from '@/lib/task'
-import PostCard from '@/components/post-card'
+import { createPost, getPosts, editPost, deletePost } from "@/lib/task";
+import PostCard from "@/components/post-card";
 
 export default async function BlogPage() {
-  const posts = await getPosts()
+  const posts = await getPosts();
 
   return (
     <main className="min-h-screen bg-pink-50 p-8">
@@ -23,13 +23,13 @@ export default async function BlogPage() {
 
       {/* READ + EDIT + DELETE */}
       {posts.map((post, index) => (
-          <PostCard
-            key={index}
-            content={post.content}
-            createdAt={post.createdAt}
-            index={index}
-          />
-        ))}
+        <PostCard
+          key={index}
+          content={post.content}
+          createdAt={post.createdAt}
+          index={index}
+        />
+      ))}
     </main>
-  )
+  );
 }
